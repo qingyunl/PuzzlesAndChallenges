@@ -1,6 +1,6 @@
 /*
 Given a set of points in 2d plane, find TOP K points which are closest to the origin.
-Given solution runs in worst case time complexity of O(nk) and space (k+1)
+Given solution runs in worst case time complexity of O(nlogk) and space (k+1)
 */
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -47,26 +47,25 @@ public class OriginQuestion {
 	public static Point[] closestk( Point  myList[], int k ) {
 		PriorityQueue<Point> kClosestPoints = 
 			new PriorityQueue<Point>(k);
+		Point maxPointSoFar = new Point(0,0);
 		for(int i=0;i<myList.length;i++){
-			kClosestPoints.add(myList[i]);
-			if(kClosestPoints.size() > k	){
-				kClosestPoints = fetchTopK(kClosestPoints, k);
+			if(myList[i].compareTo(maxPointSoFar) > 0){
+				maxPointSoFar = myList[i];
+				if(kClosestPoints.size() < k){
+					kClosesPoints.add(myList[i]);
+				}
+			}else{
+				if(kClosestPoints.size() < k){
+					kClosesPoints.add(myList[i]);
+				}
 			}
+			
 		}
 		Point[] ret = new Point[k];
 		for(int i=0;i<k;i++){
 			ret[i] = kClosestPoints.remove();
 		}
 		return ret;
-	}
-
-	public static PriorityQueue<Point> fetchTopK(PriorityQueue<Point> original,int k ){
-		PriorityQueue<Point> newKClosestPoints = 
-			new PriorityQueue<Point>(k);
-		for(int i=0;i<k;i++){
-			newKClosestPoints.add(original.remove());
-		}
-		return newKClosestPoints;
 	}
 
 	public static void main(String[] args){
